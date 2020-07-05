@@ -1,0 +1,22 @@
+tsc app.ts -w
+tsc app.ts --watch
+
+
+// creates a ts project 
+tsc --init => tsconfig.json will be created
+
+tsc : now compiles all file in the project
+      automaticly creates destination folder with output
+
+tsc --watch : compile all and watch all
+
+
+  "exclude": ["./src/analitics.ts"]
+  "exclude": ["./src/*.template.ts"]
+  "exclude": ["**/*analitics.ts"]     any folder
+
+  "exclude": ["node_modules"]  
+
+  "exclude": ["node_modules"],
+  "include": [], // filrs and folders
+  "files": ["./src/app.ts"] , //only files

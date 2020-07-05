@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPA</title>
+    <style>
+        nav { 
+            background-color: lightgray;
+            text-align: center;
+            padding: 5px;
+        }
+        ul {
+            display: flex;
+            list-style-type: none;
+        }
+
+        li> a {
+            border: solid 1px white;
+            color: yellow;
+            background-color: lightsteelblue;
+            border-radius: 5px;
+            padding: 12px;
+            margin: 4px
+        }
+        li> a:hover {
+            color: gold;
+            background-color: black;
+
+        }
+
+        .link-outlet  {
+
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Products</a></li>
+            <li><a href="#">About</a></li>
+        </ul>
+    </nav>
+    <hr>
+    <main class="link-outlet">
+
+    </main>
+    <script src="./app.js" type="module"></script>
+</body>
+</html>
