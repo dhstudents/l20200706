@@ -1,9 +1,9 @@
 
 export { }
-// inffered typr from the concrete object
+// inffered type from the concrete object
 const person = {
     name: 'popeye',
     age: 102
 }
 
-console.log(person.nicknme);    
+console.log(person.nickname);    

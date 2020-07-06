@@ -3,19 +3,15 @@ export { }
 interface Person {
     name: string,
     age: number,
-    hobbis: string[],
+    hobbies: string[],
     role: [number , string]  // tupple
-        
 }
-
-
-
 
 const person : Person = {
     name: 'popeye',
     age: 102,
-    hobbis: ['Sport', 'Cooking'],
-    role: [1 , 'admin']
+    hobbies: ['Sport', 'Cooking'],
+    role: [1 , 'admin'],
 }
 
 

@@ -1,6 +1,8 @@
 
 export { }
-const person: {   name: string,  age: number} = {
+let person: {name: string,  age: number}
+
+person = {
     name: 'popeye',
     age: 102
 }

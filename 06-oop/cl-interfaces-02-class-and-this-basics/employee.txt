@@ -1,0 +1,7 @@
+id 
+name
+department
+hireDate
+
+details
+detailsToHTML : "<tr><td></td>
