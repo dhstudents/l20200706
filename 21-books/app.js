@@ -6,7 +6,7 @@ class Book {
         this.title = title;
     }
 
-    Validate() {
+    Validate(action = 'add') {
         let answer = {
             valid: true,
             msg: 'successfully',
@@ -17,7 +17,7 @@ class Book {
             answer.msg = 'ISBN is required'
             answer.el = 'isbn'
         }
-        if (Store.exists(this.isbn)) {
+        if (action === "add" && Store.exists(this.isbn) ) {
             answer.valid = false;
             answer.msg = 'ISBN is already exists'
             answer.el = 'isbn'
@@ -42,12 +42,16 @@ class Book {
 
 // UI class
 class UI {
-    static displayBooks() {
+    static displayBooks(clearbooks = false) {
         //      const books = StoredBooks;
+        if (clearbooks) {
+            const list = document.querySelector('#book-list');
+            list.innerHTML = ''
+        }
         const books = Store.getBooks();
         books.forEach(book => UI.addBookToList(book));
     }
-
+    
     static addBookToList(book) {
         const list = document.querySelector('#book-list');
         const row = document.createElement('tr');
@@ -56,13 +60,15 @@ class UI {
             <td>${book.author}</td>
             <td>${book.isbn}</td>
             <td>
-                <i class="fas fa-edit btn btn-primary btn-sm edit" title="EDIT"></i>&nbsp;
+                <a href="#" title="EDIT">
+                    <i class="fas fa-edit btn btn-primary btn-sm edit"></i>&nbsp;
+                </a> 
                 <a href="#" title="DELETE">
-                <i class='fas fa-trash-alt btn btn-danger btn-sm delete'></i>
+                    <i class='fas fa-trash-alt btn btn-danger btn-sm delete'></i>
                 </a> 
             </td>
         `
-// <i style="font-size: 14px" class="fa btn-danger delete btn-sm">&#xf00d;</i>
+        // <i style="font-size: 14px" class="fa btn-danger delete btn-sm">&#xf00d;</i>
 
         list.appendChild(row)
     }
@@ -93,7 +99,6 @@ class UI {
         setTimeout(() => alertDiv.style.opacity = 0, 2500)
         setTimeout(() => alertDiv.remove(), 5000)
     }
-
 }
 
 // Form helper
@@ -101,12 +106,29 @@ class FormBook {
     static get title() {
         return document.querySelector('#title').value
     }
+    static set title(value) {
+        document.querySelector('#title').value = value
+    }
 
     static get author() {
         return document.querySelector('#author').value
     }
+    static set author(value) {
+        document.querySelector('#author').value = value
+    }
+
     static get isbn() {
         return document.querySelector('#isbn').value
+    }
+    static set isbn(value) {
+        document.querySelector('#isbn').value = value
+    }
+
+    static get submitButton() {
+        return document.querySelector('input[type="submit"').value
+    }
+    static set submitButton(value) {
+        return document.querySelector('input[type="submit"').value = value;
     }
 
     static getBook() {
@@ -148,12 +170,26 @@ class Store {
     }
 
     static exists(isbn_to_find) {
-        const book = Store.getBooks().find(({ isbn }) => isbn === isbn_to_find)
-        return book !== undefined;   
+
+        const book = Store.getBooks().find(({
+            isbn
+        }) => isbn === isbn_to_find)
+        return book !== undefined;
     }
 
     static save(books) {
         localStorage.setItem('books', JSON.stringify(books));
+    }
+
+    static updateBook(newbook) {
+        const books = Store.getBooks('books');
+        books.forEach((book, index) => {
+            if (book.isbn === newbook.isbn) {
+                books[index] = newbook
+            }
+        });
+
+        Store.save(books)       
     }
 
     static addBook(book) {
@@ -184,19 +220,28 @@ document.querySelector('#book-form').addEventListener('submit', e => {
     const author = FormBook.author;
     const isbn = FormBook.isbn;
 
+    const submitCaption = FormBook.submitButton.toUpperCase();
+
     // instantiate book
     //const book = new Book(isbn, author, title);
     const book = FormBook.getBook()
     //console.log(book)
-    let result = book.Validate();
+    let result = book.Validate(submitCaption);
     if (result.valid) {
-        // add book to UI - list of books
-        UI.addBookToList(book);
-        Store.addBook(book)
-        // clear feilds
-        FormBook.clearFeilds();
-        FormBook.focus(result.el);
-        UI.showAlert("Book added", 'success')
+        if (submitCaption === "UPDATE") {
+            Store.updateBook(book)
+            const target = document.querySelector('a[title="CANCEL"]')
+            cancelUpdate({ target })
+            UI.displayBooks(true);
+        } else {
+            // add book to UI - list of books
+            UI.addBookToList(book);
+            Store.addBook(book)
+            // clear feilds
+            FormBook.clearFeilds();
+            FormBook.focus(result.el);
+            UI.showAlert("Book added", 'success')
+        }
     } else {
         //alert(result.msg)
         UI.showAlert(result.msg, 'danger')
@@ -207,12 +252,48 @@ document.querySelector('#book-form').addEventListener('submit', e => {
 // Events : remove book [use event propogation]
 document.querySelector('#book-list').addEventListener('click', e => {
     console.log(e.target)
+
+    switch (e.target.parentElement.title) {
+        case "DELETE":
+            deleteTheBook(e)
+            break;
+        case "EDIT":
+            loadInputs(e)
+            break;
+        case "CANCEL":
+            cancelUpdate(e)
+            break;
+        default:
+            break
+    }
+})
+
+
+function loadInputs(e) {
+    // 1. get data from row into inputs
+    // 2. change the button label to update
+    // 3. change the title  edit to cancel
+    FormBook.isbn = e.target.parentElement.parentElement.parentElement.children[2].textContent
+    FormBook.author = e.target.parentElement.parentElement.parentElement.children[1].textContent
+    FormBook.title = e.target.parentElement.parentElement.parentElement.children[0].textContent
+    e.target.parentElement.parentElement.parentElement.style.color = "red"
+    FormBook.submitButton = "Update";
+    e.target.parentElement.title = "CANCEL"
+}
+
+function cancelUpdate(e) {
+    FormBook.clearFeilds();
+    FormBook.submitButton = "Add Book";
+    e.target.parentElement.title = "EDIT"
+    e.target.parentElement.parentElement.parentElement.style.color = "black"
+}
+
+function deleteTheBook(e) {
     Store.removeBook(
         e.target.parentElement
-         .parentElement
-            .previousElementSibling.textContent
+        .parentElement
+        .previousElementSibling.textContent
     )
     UI.deleteBook(e.target)
     UI.showAlert("Book removed", 'info')
-
-})
+}
