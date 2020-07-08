@@ -231,7 +231,7 @@ document.querySelector('#book-form').addEventListener('submit', e => {
         if (submitCaption === "UPDATE") {
             Store.updateBook(book)
             const target = document.querySelector('a[title="CANCEL"]')
-            cancelUpdate({ target })
+            cancelUpdate({ target  })
             UI.displayBooks(true);
         } else {
             // add book to UI - list of books

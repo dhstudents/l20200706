@@ -6,6 +6,10 @@ function home(outlet) {
     //     .then(response => response.text())
     //     .then(content => outlet.innerHTML += content)
 }
+function contactus(outlet) {
+    outlet.innerHTML = "<h1>Contact US</h1>"
+}
+
 function products(outlet) {
     // alert("PROD")
     outlet.innerHTML = "<h1>PRODUCTS</h1>"
@@ -14,10 +18,6 @@ function about(outlet) {
     // alert("ABOUT")
     outlet.innerHTML = "<h1>ABOUT</h1>"
     loadContent('./components/about/about.component.html', outlet)
-    // fetch('./components/about/about.component.html')
-    //     .then(response => response.text())
-    //     .then(content => outlet.innerHTML += content)
-
     loadScript('./components/about/about.component.js')
     // var scriptTag = document.createElement('script');
     // scriptTag.src = './components/about/about.component.js';
@@ -28,9 +28,13 @@ function about(outlet) {
 }
 
 function loadContent(url, outlet) {
-    fetch(url)
-        .then(response => response.text())
-        .then(content => outlet.innerHTML += content)    
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET' , url)
+    xhr.onload = function() {
+        outlet.innerHTML = xhr.responseText;
+    }
+    xhr.send()
+
 }
 
 function loadScript(url) {
@@ -39,4 +43,4 @@ function loadScript(url) {
     document.body.insertAdjacentElement('beforeend',scriptTag)   
 }
 
-export { home , products , about }
+export { home , products , about  , contactus}

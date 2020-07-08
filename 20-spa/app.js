@@ -1,21 +1,17 @@
-import {
-    home,
-    products,
-    about
-} from './routes.js'
+import { home, products, about , contactus } from './routes.js'
 
 window.onload = init
 
 const routes = {
     home,
     products,
-    about
+    about,
+    contactus
 }
 
 function init() {
     document.querySelector('nav > ul').addEventListener('click', selectRoute)
 }
-
 
 function selectRoute(event) {
     event.preventDefault();
