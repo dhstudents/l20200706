@@ -6,6 +6,10 @@ function home(outlet) {
     //     .then(response => response.text())
     //     .then(content => outlet.innerHTML += content)
 }
+function contactus(outlet) {
+    outlet.innerHTML = "<h1>Contact US</h1>"
+}
+
 function products(outlet) {
     // alert("PROD")
     outlet.innerHTML = "<h1>PRODUCTS</h1>"
@@ -33,9 +37,13 @@ function about(outlet) {
 }
 
 function loadContent(url, outlet) {
-    fetch(url)
-        .then(response => response.text())
-        .then(content => outlet.innerHTML += content)    
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET' , url)
+    xhr.onload = function() {
+        outlet.innerHTML = xhr.responseText;
+    }
+    xhr.send()
+
 }
 
 
@@ -61,6 +69,7 @@ function loadStyle(url) {
      
 }
 
+<<<<<<< HEAD
 
 
 export { home, products, about }
@@ -82,3 +91,6 @@ export { home, products, about }
 //     if (typeof fileref!="undefined")
 //      document.getElementsByTagName("head")[0].appendChild(fileref)
 //    }
+=======
+export { home , products , about  , contactus}
+>>>>>>> 9b8f30aba6ec911690269576d936d7002bbff908
