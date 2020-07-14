@@ -69,7 +69,6 @@ function loadStyle(url) {
      
 }
 
-<<<<<<< HEAD
 
 
 export { home, products, about }
@@ -91,6 +90,3 @@ export { home, products, about }
 //     if (typeof fileref!="undefined")
 //      document.getElementsByTagName("head")[0].appendChild(fileref)
 //    }
-=======
-export { home , products , about  , contactus}
->>>>>>> 9b8f30aba6ec911690269576d936d7002bbff908
